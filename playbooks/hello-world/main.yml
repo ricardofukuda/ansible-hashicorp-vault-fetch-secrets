@@ -1,0 +1,22 @@
+- name: testing hashi vault fetch secrets
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: hashi vault fetch secrets
+      include_role:
+        name: roles/hashi-vault-fetch-secrets
+      vars: 
+        hashi_vault_secrets:
+          APP: "secret/data/dev/app"
+          DATABASE_PASSWORD: "secret/data/dev/app:database_password"
+    
+    - debug:
+        var: hashi_vault_secrets_
+
+    - debug:
+        var:
+          APP
+
+    - debug:
+        var:
+          DATABASE_PASSWORD

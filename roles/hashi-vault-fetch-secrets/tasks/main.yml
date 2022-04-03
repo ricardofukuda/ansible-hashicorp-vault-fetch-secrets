@@ -1,0 +1,20 @@
+#- name: get hashi vault secret
+#  community.hashi_vault.vault_read:
+#    url: "{{hashi_vault.url}}"
+#    token: "{{hashi_vault.token}}"
+#    auth_method: "{{hashi_vault.auth_method}}"
+#    path: "{{item.value}}"
+#  register: results
+#  with_dict: "{{hashi_vault_secrets}}"
+
+- name: fetching hashi vault secrets
+  set_fact:
+    hashi_vault_secrets_: "{{ hashi_vault_secrets_ | default({}) | combine ({ item.key : lookup('community.hashi_vault.hashi_vault', item.value, auth_method=hashi_vault.auth_method, token=hashi_vault.token, url=hashi_vault.url) }) }}"
+  with_dict: "{{hashi_vault_secrets}}"
+  when: hashi_vault_secrets is defined
+
+- name: updating hashi_vault_secrets_ variable
+  set_fact:
+    "{{ item.key }}": "{{ item.value }}"
+  with_dict: "{{hashi_vault_secrets_}}"
+  when: hashi_vault_secrets_ is defined
