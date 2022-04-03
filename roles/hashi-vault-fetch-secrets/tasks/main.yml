@@ -9,7 +9,7 @@
 
 - name: fetching hashi vault secrets
   set_fact:
-    hashi_vault_secrets_: "{{ hashi_vault_secrets_ | default({}) | combine ({ item.key : lookup('community.hashi_vault.hashi_vault', item.value, auth_method=hashi_vault.auth_method, token=hashi_vault.token, url=hashi_vault.url) }) }}"
+    hashi_vault_secrets_: "{{ hashi_vault_secrets_ | default({}) | combine ({ item.key : lookup('community.hashi_vault.hashi_vault', item.value) }) }}"
   with_dict: "{{hashi_vault_secrets}}"
   when: hashi_vault_secrets is defined
 
